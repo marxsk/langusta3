@@ -339,7 +339,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
         List<SpelledWord> selectedSpelling = desambSpeller.wordSpelling((String) jList1.getSelectedValue());
         for (SpelledWord lv : spellings) {
             jComboBox1.addItem(lv.getStringAsList());
-            if (lv.toString().equals(selectedSpelling.get(0).getStringAsList())) {
+            if (lv.getStringAsList().equals(selectedSpelling.get(0).getStringAsList())) {
                 jComboBox1.setSelectedItem(lv.getStringAsList());
             }
         }

@@ -30,13 +30,18 @@ public class AbstractTransform extends AbstractRule {
         Integer charno = info.getCharNo();
         
         if (info.getCharNo() == null) {
-            charno = word.size();
+            charno = word.size() - 1;
         }
 
+        if (charno < 0) {
+            charno += word.size();
+        }
+        
         for (String k : transformTable.keySet()) {
-            if (word.get(charno-1).toString().equals(k)) {
-                word.remove(charno-1);
-                word.add(charno-1, alphabet.getVowel(transformTable.get(k)));
+            if (word.get(charno).toString().equals(k)) {
+                word.remove((int) charno);
+
+                word.add(charno, alphabet.getVowel(transformTable.get(k)));
                 break;
             }
         }

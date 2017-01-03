@@ -216,6 +216,7 @@ public class ApplicationGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
+        jComboBox1.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         jComboBox1.setEnabled(false);
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -236,6 +237,11 @@ public class ApplicationGUI extends javax.swing.JFrame {
         jTable1.setColumnSelectionAllowed(true);
         jTable1.setEnabled(false);
         jTable1.setRowSelectionAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
 
         jButton1.setText("Previous");
@@ -290,8 +296,8 @@ public class ApplicationGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(13, 13, 13)
+                .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 39, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jButton1)
                     .add(jButton2)
@@ -376,6 +382,13 @@ public class ApplicationGUI extends javax.swing.JFrame {
         this.saveAnno();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // columns are selected when this action is enabled
+        this.saveRecord(jList1.getSelectedIndex(), jTable1.getSelectedColumns());
+        this.setPatternParts();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable1MouseClicked
+
     public static void main(final String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -452,11 +465,29 @@ public class ApplicationGUI extends javax.swing.JFrame {
             private List<String> patterns;
             private List<String> gtags;
 
-            public Mongo(Map<String, List<ExtendedFormInfoTO>> m) {
+            public Mongo(Generator generator, Map<String, List<ExtendedFormInfoTO>> m, List<String> selectedPatterns) {
                 map = m;
-                patterns = new ArrayList<String>(m.keySet());
+                List<String> allPatterns = new ArrayList<String>(m.keySet());
                 gtags = new ArrayList<String>();
 
+                /* remove patterns that do not match constraints */
+                patterns = new ArrayList<String>();
+                for (String p : allPatterns) {
+                    if (generator.getPattern(p).getLimitPattern().isEmpty()) {
+                        patterns.add(p);
+                    } else {
+                        boolean accept = false;
+                        for (String px : generator.getPattern(p).getLimitPattern()) {
+                            if (selectedPatterns.contains(px)) {
+                                accept = true;
+                            }
+                        }
+                        if (accept) {
+                            patterns.add(p);
+                        }
+                    }
+                }
+                
                 for (String p : patterns) {
                     for (FormInfoTO f : map.get(p)) {
                         if (gtags.contains(f.getTag()) == false) {
@@ -521,10 +552,9 @@ public class ApplicationGUI extends javax.swing.JFrame {
             }
         }
 
-        jTable1.setModel(new Mongo(forms));
+        jTable1.setModel(new Mongo(this.generator, forms, this.newPatterns.get(jList1.getSelectedIndex())));
         jTable1.setDefaultRenderer(Object.class, new MyTableCellRenderer());
-
-                jTable1.clearSelection();
+        jTable1.clearSelection();
 
         for (String patternName : this.newPatterns.get(jList1.getSelectedIndex())) {
             if (patternName.isEmpty()) {

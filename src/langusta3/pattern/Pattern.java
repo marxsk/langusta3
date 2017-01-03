@@ -1,6 +1,7 @@
 package langusta3.pattern;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class Pattern {
     protected List<List<ConditionInfo>> baseInConditionLists;
     protected List<ConditionInfo> baseLists;
     protected List<FormInfo> formLists;
+    protected List<String> onlyWithPatternNames;
 
     public Pattern(Generator g) {
         this.generator = g;
@@ -34,6 +36,7 @@ public class Pattern {
         baseInConditionLists = new ArrayList<List<ConditionInfo>>();
         baseLists = new ArrayList<ConditionInfo>();
         formLists = new ArrayList<FormInfo>();
+        onlyWithPatternNames = new ArrayList<String>();
     }
 
     public void setID(String id) {
@@ -44,7 +47,15 @@ public class Pattern {
     public String getID() {
         return id;
     }
+    
+    public void setLimitPattern(String patternNames) {
+        this.onlyWithPatternNames = new ArrayList<String>(Arrays.asList(patternNames.split(",")));
+    }
 
+    public List<String> getLimitPattern() {
+        return this.onlyWithPatternNames;
+    }
+    
     @Override
     public String toString() {
         return id;

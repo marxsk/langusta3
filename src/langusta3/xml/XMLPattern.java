@@ -18,7 +18,10 @@ class XMLPattern extends Pattern {
         super(g);
 
         this.setID(patternElement.getAttribute("id").getValue());
-
+        if ((patternElement.getAttribute("parent") != null) && (this.getID().endsWith("_Z"))) {
+            this.setLimitPattern(patternElement.getAttribute("parent").getValue());
+        }
+        
         // load negative condition-lists and their conditions
         for (Element cl : (List<Element>) patternElement.getChildren("negative-condition-list")) {
             List<ConditionInfo> lci = new ArrayList<ConditionInfo>();

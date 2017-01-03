@@ -66,14 +66,35 @@ public class Generator {
     }
 
     public List<Pattern> getPossiblePatterns(SpelledWord word) {
+        List<Pattern> acceptablePatterns = new ArrayList<Pattern>();
         List<Pattern> result = new ArrayList<Pattern>();
-
+        
         for (Pattern p : this.getPatterns()) {
             if (p.testWordAsLemma(word)) {
-                result.add(p);
+                acceptablePatterns.add(p);
             }
         }
 
+        for (Pattern p : acceptablePatterns) {
+            if (p.getLimitPattern().isEmpty() == false) {
+                boolean accept = false;
+                
+                for (String s : p.getLimitPattern()) {
+                    for (Pattern px : acceptablePatterns) {
+                        if (px.getID().equals(s)) {
+                            accept = true;
+                        }
+                    }
+                }
+                
+                if (accept) { 
+                    result.add(p);
+                }
+            } else {
+                result.add(p);
+            }
+        }
+        
         return result;
     }
 

@@ -4,8 +4,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/xml/XMLAlphabet.java</file>
             <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/pattern/Pattern.java</file>
+            <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/pattern/rule/CzShorten.java</file>
             <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/pattern/rule/AbstractRule.java</file>
+            <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/cz/AsaTest.java</file>
+            <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/core/SpelledWord.java</file>
+            <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/pattern/rule/CzSoftenA.java</file>
+            <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/pattern/rule/Chop.java</file>
+            <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/pattern/rule/CzSoftenB.java</file>
             <file>file:/Users/marx/GIT/SCI/langusta3/src/langusta3/pattern/rule/AbstractTransform.java</file>
         </group>
     </open-files>

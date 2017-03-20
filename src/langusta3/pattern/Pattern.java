@@ -14,7 +14,8 @@ import langusta3.pattern.condition.ConditionInfo;
 import langusta3.pattern.rule.AbstractRule;
 import langusta3.pattern.rule.RuleNotApplicableException;
 
-/** Basic representation of pattern
+/**
+ * Basic representation of pattern
  *
  * @author marx
  */
@@ -40,14 +41,16 @@ public class Pattern {
     }
 
     public void setID(String id) {
-        /** @todo: check unique ID across generator OR null **/
+        /**
+         * @todo: check unique ID across generator OR null *
+         */
         this.id = id;
     }
 
     public String getID() {
         return id;
     }
-    
+
     public void setLimitPattern(String patternNames) {
         this.onlyWithPatternNames = new ArrayList<String>(Arrays.asList(patternNames.split(",")));
     }
@@ -55,7 +58,7 @@ public class Pattern {
     public List<String> getLimitPattern() {
         return this.onlyWithPatternNames;
     }
-    
+
     @Override
     public String toString() {
         return id;
@@ -130,7 +133,9 @@ public class Pattern {
 
         // Base changes in condition list which was used
         for (ConditionInfo ci : baseInConditionLists.get(conditionLists.indexOf(this.getMatchingCondition(oWord)))) {
-            /** @todo: duplicity **/
+            /**
+             * @todo: duplicity *
+             */
             if (result.containsKey(ci.getBaseNo()) == false) {
                 result.put(ci.getBaseNo(), new SpelledWord(word));
             }
@@ -140,12 +145,12 @@ public class Pattern {
                     try {
                         ac.apply(oWord.get(0).getAlphabet(), result.get(ci.getBaseNo()), ci);
                     } catch (RuleNotApplicableException ex) {
-                       return null;
+                        return null;
                     }
                     break;
                 }
             }
-            
+
             result.get(ci.getBaseNo());
         }
 
@@ -195,6 +200,15 @@ public class Pattern {
                 }
             }
 
+            SpelledWord prefix = new SpelledWord();
+            if (fi.getPrefix() != null) {
+                for (String v : fi.getPrefix().split(",")) {
+                    if (fit.getLemma().get(0).getAlphabet().getVowel(v) != null) {
+                        prefix.add(fit.getLemma().get(0).getAlphabet().getVowel(v));
+                    }
+                }
+            }
+
             SpelledWord w = new SpelledWord(bases.get(fi.getBaseNo()));
             SpelledWord resultSuffix = null;
             boolean matched = false;
@@ -214,6 +228,11 @@ public class Pattern {
                 w.addAll(suffix);
             }
 
+            if (prefix != null) {
+                // We do not apply filters on prefix (@todo?)
+                w.addAll(0, prefix);
+            }
+            
             // Use global filters
             for (AbstractFilter f : generator.getGlobalFilters()) {
                 w = f.apply(w, null);
@@ -221,31 +240,32 @@ public class Pattern {
             fit.setWord(w);
             // @new--
             fit.setPattern(this.toString());
-            
+
             lfi.add(fit);
         }
 
         return lfi;
     }
-    
-    /** Generate all word forms (only once + withouth tags).
+
+    /**
+     * Generate all word forms (only once + withouth tags).
      *
-     *  This method generate all gramatical forms for given word. But in the result is each form 
-     *  represented only once.
-     **/
+     * This method generate all gramatical forms for given word. But in the
+     * result is each form represented only once.
+     *
+     */
     public List<FormInfoTO> generateWForms(Map<String, SpelledWord> bases) {
         List<FormInfoTO> forms = this.getWordForms(bases);
         List<FormInfoTO> result = new ArrayList<FormInfoTO>();
 
   //      System.out.println("afterReturn:\n" + this.generateGForms(word, patternName));
-        
         if (forms == null) {
             return null;
         }
-        
-        for (int i=0; i < forms.size(); i++) {
+
+        for (int i = 0; i < forms.size(); i++) {
             boolean sameWord = false;
-            for (int z=i+1; z < forms.size(); z++) {
+            for (int z = i + 1; z < forms.size(); z++) {
                 if (forms.get(i).getWord().toString().equals(forms.get(z).getWord().toString()) == true) {
                     sameWord = true;
                 }
@@ -255,7 +275,7 @@ public class Pattern {
                 result.add(forms.get(i));
             }
         }
-                
+
         return result;
     }
 
@@ -267,7 +287,10 @@ public class Pattern {
         List<SpelledWord> t4 = new ArrayList<SpelledWord>();
         List<SpelledWord> t5 = new ArrayList<SpelledWord>();
 
-        /** @todo: very strong - we believe that only one basechange can occur for this pattern & tag **/
+        /**
+         * @todo: very strong - we believe that only one basechange can occur
+         * for this pattern & tag *
+         */
         String baseNo = null;
 
         List<AbstractFilter> laf = new ArrayList<AbstractFilter>(generator.getGlobalFilters());
@@ -283,14 +306,16 @@ public class Pattern {
             if (w.size() == 0) {
                 continue;
             }
-            
+
             for (FormInfo fit : this.formLists) {
                 if (fit.getTag().matches(tag)) {
                     SpelledWord res = new SpelledWord(w);
                     List<SpelledWord> t1a = new ArrayList<SpelledWord>();
                     baseNo = fit.getBaseNo();
 
-                    /** @todo: duplicity **/
+                    /**
+                     * @todo: duplicity *
+                     */
                     SpelledWord suffix = new SpelledWord();
                     for (String v : fit.getSuffix().split(",")) {
                         if (w.get(0).getAlphabet().getVowel(v) != null) {
@@ -353,7 +378,9 @@ public class Pattern {
                 List<SpelledWord> wt = null;
                 List<SpelledWord> temp = null;
 
-                /** @todo: apply local basechanges here **/
+                /**
+                 * @todo: apply local basechanges here *
+                 */
                 wt = this.revertBaseChanges(w, baseNo, baseInConditionLists.get(k));
 
                 for (int i = lci.size() - 1; i >= 0; i--) {
@@ -382,7 +409,9 @@ public class Pattern {
 
                 if (wt != null) {
                     t3.addAll(wt);
-                    /** only first matching condition-list is applied **/
+                    /**
+                     * only first matching condition-list is applied *
+                     */
                     // break;
                 }
             }
@@ -405,30 +434,30 @@ public class Pattern {
     }
 
     private List<SpelledWord> revertBaseChanges(SpelledWord word, String lemmaBaseNo, List<ConditionInfo> lci) {
-            List<SpelledWord> lsw = new ArrayList<SpelledWord>();
-            lsw.add(word);
+        List<SpelledWord> lsw = new ArrayList<SpelledWord>();
+        lsw.add(word);
 
-            for (int i = lci.size() - 1; i >= 0; i--) {
-                ConditionInfo ci = lci.get(i);
-                if (ci.getBaseNo().equals(lemmaBaseNo) == false) {
-                    continue;
-                }
+        for (int i = lci.size() - 1; i >= 0; i--) {
+            ConditionInfo ci = lci.get(i);
+            if (ci.getBaseNo().equals(lemmaBaseNo) == false) {
+                continue;
+            }
 
-                for (AbstractRule ac : generator.getRules()) {
-                    if (ac.isApplicable(ci) == true) {
-                        List<SpelledWord> temp = new ArrayList<SpelledWord>();
+            for (AbstractRule ac : generator.getRules()) {
+                if (ac.isApplicable(ci) == true) {
+                    List<SpelledWord> temp = new ArrayList<SpelledWord>();
 
-                        for (SpelledWord w2 : lsw) {
-                            for (SpelledWord sw : ac.revert(w2, ci)) {
-                                temp.add(sw);
-                            }
+                    for (SpelledWord w2 : lsw) {
+                        for (SpelledWord sw : ac.revert(w2, ci)) {
+                            temp.add(sw);
                         }
-
-                        lsw = temp;
-                        break;
                     }
+
+                    lsw = temp;
+                    break;
                 }
             }
+        }
 
         return lsw;
     }

@@ -7,6 +7,7 @@ import java.util.List;
 import langusta3.core.SpelledWord;
 import langusta3.pattern.condition.Equal;
 import langusta3.pattern.condition.GrammarClass;
+import langusta3.pattern.condition.Length;
 import langusta3.pattern.rule.Append;
 import langusta3.pattern.rule.Chop;
 import langusta3.spelling.iSpeller;
@@ -37,6 +38,7 @@ public class Generator {
 
         conditions.add(new Equal("equal"));
         conditions.add(new GrammarClass("class"));
+        conditions.add(new Length("length"));
 
         rules.add(new Append("append"));
         rules.add(new Chop("chop"));

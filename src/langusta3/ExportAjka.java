@@ -41,6 +41,9 @@ public class ExportAjka {
         while ((line = input.readLine()) != null) {
             line = line.trim();
             String[] w = line.split(":");
+            if (w.length != 2) {
+                continue;
+            }
             String[] patterns = w[1].split(";");
 
             Set<FormInfoTO> sfi = new HashSet<FormInfoTO>();

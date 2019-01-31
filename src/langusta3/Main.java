@@ -22,7 +22,7 @@ import langusta3.xml.XMLGenerator;
  */
 public class Main {
 
-    private static String skAdjectivePattern = "/home/marx/nlp/Langusta3/src/data/sk/new.xml";
+    private static String skAdjectivePattern = "/Users/marx/GIT/langusta3/src/data/sk/new.xml";
 
     /**
      * @param args the command line arguments

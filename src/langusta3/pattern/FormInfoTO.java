@@ -7,6 +7,7 @@ import langusta3.core.SpelledWord;
  * @author marx
  */
 public class FormInfoTO {
+
     private SpelledWord lemma;
     private SpelledWord word;
     private String tag;
@@ -21,10 +22,14 @@ public class FormInfoTO {
         points = 0;
     }
 
-    public void setLemma(SpelledWord l) { lemma = new SpelledWord(l); }
+    public void setLemma(SpelledWord l) {
+        lemma = new SpelledWord(l);
+    }
+
     public void setWord(SpelledWord w) {
         word = new SpelledWord(w);
     }
+
     public void setTag(String t) {
         if (t == null) {
             tag = null;
@@ -32,7 +37,11 @@ public class FormInfoTO {
             tag = new String(t);
         }
     }
-    public void setPoints(int p) { points = p; }
+
+    public void setPoints(int p) {
+        points = p;
+    }
+
     public void setPattern(String p) {
         if (p == null) {
             pattern = null;
@@ -41,11 +50,25 @@ public class FormInfoTO {
         }
     }
 
-    public SpelledWord getLemma() { return lemma; }
-    public SpelledWord getWord() { return word; }
-    public String getTag() { return new String(tag); }
-    public int getPoints() { return points; }
-    public String getPattern() { return new String(pattern); }
+    public SpelledWord getLemma() {
+        return lemma;
+    }
+
+    public SpelledWord getWord() {
+        return word;
+    }
+
+    public String getTag() {
+        return new String(tag);
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public String getPattern() {
+        return new String(pattern);
+    }
 
     @Override
     public String toString() {
@@ -54,5 +77,25 @@ public class FormInfoTO {
         result = this.getLemma() + " # " + this.getWord() + " ## " + tag + " >> " + pattern + "\n";
 
         return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        return (this.getWord().toString().equals(((FormInfoTO) obj).getWord().toString())) && (this.getTag().equals(((FormInfoTO) obj).getTag()));
     }
 }

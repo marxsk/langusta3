@@ -26,11 +26,10 @@ import langusta3.xml.XMLGenerator;
  */
 public class ExportAjka {
 
-    private static String czNounPattern = "/Users/marx/GIT/slovnik/src/patterns-k1.xml";
-//    private static String czInputFile = "/Users/marx/GIT/langusta3/vzory/pokus";
-    private static String czInputFile = "/Users/marx/GIT/slovnik/src/k1.txt";
-
     public static void main(String[] args) throws XMLException, FileNotFoundException, IOException {
+        String czNounPattern = args[0];
+        String czInputFile = args[1];
+
         NaiveSpeller ns = new NaiveSpeller(new XMLAlphabet("cz"));
         XMLGenerator xg = new CzechXMLGenerator(ns, new FileInputStream(czNounPattern));
         xg.load();
